@@ -1,6 +1,6 @@
 # shared/models/db_services.py
 from .db import db
-from scripts.utils import normalizar_fecha
+from shared.helpers.helpers import normalizar_fecha
 
 def registrar_archivo(canvas_file_id, filename, updated_at, file_id_openai, course_id):
     """Registra o actualiza un archivo procesado"""

@@ -1,4 +1,7 @@
 import re
+from flask import Flask
+from shared.models.db import db
+from shared.config import DATABASE_URL
 
 def extraer_fuentes(respuesta):
     """
@@ -77,3 +80,26 @@ def generar_respuesta_formateada(user_name, course_name, nro_consulta, restantes
     </details>
     <p><em>Tienes {restantes} consultas restantes este mes.</em></p>
     """
+
+def create_app():
+    app = Flask(__name__)
+    app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    db.init_app(app)
+    return app
+
+def normalizar_fecha(fecha):
+    """
+    Convierte cualquier formato de fecha a 'YYYY-MM-DD HH:MM:SS'
+    Maneja: str, datetime, con T/Z, sin T/Z, etc.
+    """
+    if not fecha:
+        return None
+    if isinstance(fecha, str):
+        # Reemplazar T por espacio y quitar Z
+        fecha = fecha.replace("T", " ").replace("Z", "")
+        return fecha[:19]  # Solo hasta segundos
+    elif hasattr(fecha, 'strftime'):  # Es datetime
+        return fecha.strftime("%Y-%m-%d %H:%M:%S")
+    else:
+        return str(fecha)[:19]
