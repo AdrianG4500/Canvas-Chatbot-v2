@@ -2,7 +2,7 @@
 from flask import Flask
 from shared.models.db import db
 from shared.config import SECRET_KEY
-from routes.main_routes import main_bp
+from .routes.main_routes import main_bp
 from routes.lti_routes import lti_bp
 from routes.admin_routes import admin_bp
 import os
