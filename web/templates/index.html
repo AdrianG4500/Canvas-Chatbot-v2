@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Asistente Académico - {{ curso_nombre }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <!-- Script de Marked.js -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <!-- Header con logo, título y controles -->
+    <header class="header-section">
+      <div class="logo-title-section">
+        <div class="logo-container">
+          <img src="{{ url_for('static', filename='img/logo.png') }}" 
+               alt="Logo" 
+               class="logo" 
+               id="logo">
+        </div>
+        <div class="title-container">
+          <h1>Asistente Académico</h1>
+          <h2>{{ curso_nombre }}</h2>
+        </div>
+      </div>
+      
+      <div class="theme-toggle-section">
+        <!-- Toggle de tema -->
+        <button class="theme-toggle" id="theme-toggle">
+          <span class="theme-icon" id="theme-icon">☀️</span>
+          <span id="theme-text">Modo Claro</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Selector de asistentes separado -->
+    {% if asistentes and asistentes|length > 1 %}
+    <div class="assistant-selector-section">
+      <div class="select-container">
+        <label for="asistente_id">Seleccionar asistente:</label>
+        <select name="asistente_id" id="asistente_id">
+          {% for asistente in asistentes %}
+          <option value="{{ asistente.asistente_id }}">{{ asistente.nombre }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+    {% else %}
+    <input type="hidden" id="asistente_id_hidden" value="{{ asistentes[0].asistente_id if asistentes else '' }}">
+    {% endif %}
+
+    <!-- Formulario principal -->
+    <div class="form-container">
+      <form method="POST" id="form-pregunta">
+        <textarea name="pregunta" 
+                  id="textarea-pregunta" 
+                  placeholder="Escribe tu pregunta sobre el curso aquí..." 
+                  required></textarea>
+        
+        <!-- Campo oculto para asistente si solo hay uno -->
+        {% if not (asistentes and asistentes|length > 1) %}
+        <input type="hidden" name="asistente_id" value="{{ asistentes[0].asistente_id if asistentes else '' }}">
+        {% endif %}
+
+        <button type="submit">
+          <span>💭 Preguntar</span>
+        </button>
+      </form>
+    </div>
+
+    <!-- Campos ocultos para consulta actual -->
+    {% if consulta_id %}
+    <input type="hidden" id="consulta_id" value="{{ consulta_id }}">
+    <input type="hidden" id="pregunta_actual" value="{{ pregunta_texto }}">
+    {% endif %}
+
+    <!-- Contenedor del historial -->
+    <div class="historial-container" id="historial-container">
+      <!-- Aquí se irán agregando las preguntas y respuestas dinámicamente -->
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,678 @@
+/* Importar fuentes de Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Source+Sans+Pro:wght@400;600;700&display=swap');
+
+/* Variables CSS para paleta de colores */
+:root {
+  /* Modo Claro */
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F5F7FA;
+  --bg-hover: #F0F4F8;
+  --text-primary: #1B1F23;
+  --text-secondary: #6B7785;
+  --border-divider: #E0E6ED;
+  --accent-primary: #1DC396;
+  --accent-secondary: #3A6EA5;
+  
+  /* Fuentes */
+  --font-title: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-subtitle: 'Source Sans Pro', sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  
+  /* Sombras */
+  --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-focus: 0 0 0 3px rgba(29, 195, 150, 0.1);
+  --shadow-dropdown: 0 8px 24px rgba(0, 0, 0, 0.12);
+  
+  /* Transiciones */
+  --transition-fast: 0.2s ease;
+  --transition-medium: 0.3s ease;
+  --transition-dropdown: 0.15s ease-out;
+}
+
+/* Modo Oscuro */
+[data-theme="dark"] {
+  --bg-primary: #101C26;
+  --bg-secondary: #172733;
+  --bg-hover: #1E2A36;
+  --text-primary: #E6ECF1;
+  --text-secondary: #9CAAB5;
+  --border-divider: #2C3B47;
+  --accent-primary: #1DC396;
+  --accent-secondary: #3AAFA9;
+  
+  --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-focus: 0 0 0 3px rgba(29, 195, 150, 0.2);
+  --shadow-dropdown: 0 8px 24px rgba(0, 0, 0, 0.6);
+}
+
+/* Reset y configuración base */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  transition: background-color var(--transition-medium), color var(--transition-medium);
+  min-height: 100vh;
+}
+
+/* Contenedor principal */
+.container { 
+  max-width: 880px; /* 10% más ancho que 800px */
+  margin: 0 auto; 
+  padding: 24px;
+  position: relative;
+}
+
+/* Header con logo y controles */
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding: 20px 0;
+}
+
+.logo-title-section {
+  display: flex;
+  align-items: center;
+  gap: 32px; /* Aumentado de 24px a 32px para mejor proporción */
+  flex: 1;
+}
+
+.logo-container {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  height: 140px; /* Duplicado de 72px a 140px */
+  width: auto;
+  transition: opacity var(--transition-fast);
+}
+
+.title-container h1 {
+  font-family: var(--font-title);
+  font-weight: 900; /* Black weight */
+  font-size: 43px; /* Reducido 10%: de 48px a 43px */
+  color: var(--text-primary);
+  margin: 0 0 8px 0;
+  letter-spacing: -0.8px;
+  line-height: 1.1;
+}
+
+.title-container h2 {
+  font-family: var(--font-subtitle);
+  font-weight: 600;
+  font-size: 29px; /* Reducido 10%: de 32px a 29px */
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.2;
+}
+
+/* Toggle de tema */
+.theme-toggle {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-divider);
+  border-radius: 50px;
+  padding: 10px 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all var(--transition-fast);
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.theme-toggle:hover {
+  border-color: var(--accent-primary);
+  box-shadow: var(--shadow-light);
+  transform: translateY(-1px);
+}
+
+.theme-icon {
+  font-size: 18px;
+}
+
+/* Sección del selector de asistentes separada */
+.assistant-selector-section {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+  padding: 0 20px;
+}
+
+/* Selector de asistentes mejorado */
+.select-container {
+  position: relative;
+  margin: 0;
+  text-align: center;
+}
+
+.select-container label {
+  display: block;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+}
+
+.select-container select {
+  appearance: none;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-divider);
+  border-radius: 12px;
+  padding: 14px 50px 14px 20px;
+  font-family: var(--font-body);
+  font-size: 16px;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  min-width: 280px;
+  box-shadow: var(--shadow-light);
+  text-align: center;
+  position: relative;
+  z-index: 10;
+}
+
+.select-container select:hover {
+  border-color: var(--accent-primary);
+  box-shadow: var(--shadow-medium);
+}
+
+.select-container select:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: var(--shadow-focus);
+}
+
+/* Flecha personalizada con animación */
+.select-container::after {
+  content: "▼";
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--accent-primary);
+  pointer-events: none;
+  font-size: 14px;
+  margin-top: 18px;
+  transition: all var(--transition-dropdown);
+  z-index: 11;
+}
+
+.select-container select:focus + .select-container::after,
+.select-container:focus-within::after {
+  transform: translateY(-50%) rotate(180deg);
+  color: var(--accent-primary);
+}
+
+/* Estilos para las opciones del dropdown */
+.select-container select option {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  padding: 12px 16px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  border: none;
+  transition: background-color var(--transition-dropdown);
+}
+
+.select-container select option:hover {
+  background: var(--bg-hover);
+}
+
+.select-container select option:checked {
+  background: var(--accent-primary);
+  color: white;
+}
+
+/* Mejoras adicionales para el dropdown en navegadores que lo soportan */
+.select-container select::-webkit-scrollbar {
+  width: 8px;
+}
+
+.select-container select::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+  border-radius: 4px;
+}
+
+.select-container select::-webkit-scrollbar-thumb {
+  background: var(--border-divider);
+  border-radius: 4px;
+}
+
+.select-container select::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-primary);
+}
+
+/* Contenedor principal del formulario */
+.form-container {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-divider);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 32px;
+  box-shadow: var(--shadow-medium);
+  transition: all var(--transition-medium);
+}
+
+.form-container:focus-within {
+  border-color: var(--accent-primary);
+  box-shadow: var(--shadow-focus), var(--shadow-medium);
+}
+
+/* Textarea mejorado */
+textarea {
+  width: 100%;
+  min-height: 120px;
+  margin: 0;
+  padding: 16px;
+  border: 1px solid var(--border-divider);
+  border-radius: 12px;
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  resize: vertical;
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-light);
+}
+
+textarea:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: var(--shadow-focus);
+}
+
+textarea::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.8;
+}
+
+/* Botón principal mejorado */
+button[type="submit"] {
+  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 32px;
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-medium);
+  margin-top: 16px;
+  min-width: 140px;
+}
+
+button[type="submit"]:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(29, 195, 150, 0.3);
+}
+
+button[type="submit"]:active {
+  transform: translateY(0);
+}
+
+/* Historial de conversaciones */
+.historial-container {
+  margin-top: 24px;
+}
+
+/* Elementos de pregunta-respuesta tipo burbuja */
+.qa-item {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-divider);
+  border-radius: 14px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  box-shadow: var(--shadow-medium);
+  transition: all var(--transition-medium);
+}
+
+.qa-item:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="dark"] .qa-item:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* Contenedor de pregunta */
+.pregunta-container {
+  background: var(--bg-secondary);
+  padding: 20px;
+  border-bottom: 1px solid var(--border-divider);
+}
+
+.pregunta-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.pregunta-header strong {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--accent-primary);
+}
+
+.pregunta-timestamp {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-weight: 400;
+}
+
+.pregunta-texto {
+  background: var(--bg-primary);
+  padding: 16px;
+  border-radius: 10px;
+  border-left: 4px solid var(--accent-primary);
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.6;
+  color: var(--text-primary);
+}
+
+/* Contenedor de respuesta */
+.respuesta-container {
+  padding: 20px;
+  background: var(--bg-primary);
+}
+
+.respuesta-status {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.status-loading {
+  color: var(--accent-secondary);
+  font-style: italic;
+}
+
+.status-completed {
+  color: var(--accent-primary);
+  font-weight: 600;
+}
+
+.status-error {
+  color: #dc3545;
+  font-weight: 600;
+}
+
+/* Contenido de respuesta con animación progressive reveal */
+.respuesta-contenido {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-primary);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+}
+
+.respuesta-contenido.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.respuesta-contenido h1, 
+.respuesta-contenido h2, 
+.respuesta-contenido h3,
+.respuesta-contenido h4, 
+.respuesta-contenido h5, 
+.respuesta-contenido h6 {
+  color: var(--text-primary);
+  font-weight: 600;
+  margin: 16px 0 8px 0;
+}
+
+.respuesta-contenido p {
+  margin: 0 0 12px 0;
+}
+
+.respuesta-contenido strong {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.respuesta-contenido a {
+  color: var(--accent-primary);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--transition-fast);
+}
+
+.respuesta-contenido a:hover {
+  border-bottom-color: var(--accent-primary);
+}
+
+.respuesta-contenido code {
+  background: var(--bg-secondary);
+  color: var(--accent-secondary);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+}
+
+.respuesta-contenido pre {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-divider);
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px 0;
+  overflow-x: auto;
+}
+
+.respuesta-contenido pre code {
+  background: none;
+  padding: 0;
+  color: var(--text-primary);
+}
+
+.respuesta-contenido ul,
+.respuesta-contenido ol {
+    margin: 0 0 12px 20px; /* Margen inferior y sangría a la izquierda */
+    padding: 0;
+}
+
+.respuesta-contenido li {
+    margin-bottom: 8px; /* Espacio entre cada elemento de la lista */
+    line-height: 1.6;
+}
+
+.respuesta-contenido ul ul,
+.respuesta-contenido ol ol {
+    margin-top: 8px; /* Espacio superior para separar de la lista padre */
+    margin-left: 20px; /* Sangría adicional para la lista anidada */
+}
+
+/* Fuentes con animación */
+.fuentes-container {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-divider);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.3s ease-out 0.1s, transform 0.3s ease-out 0.1s;
+}
+
+.fuentes-container.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fuentes-container details {
+  font-size: 14px;
+}
+
+.fuentes-container summary {
+  cursor: pointer;
+  color: var(--accent-primary);
+  font-weight: 600;
+  padding: 8px 0;
+  transition: color var(--transition-fast);
+}
+
+.fuentes-container summary:hover {
+  color: var(--accent-secondary);
+}
+
+.fuentes-container ul {
+  margin-top: 12px;
+  padding-left: 20px;
+}
+
+.fuentes-container li {
+  margin: 8px 0;
+  color: var(--text-secondary);
+}
+
+.fuentes-container li code {
+  background: var(--bg-secondary);
+  color: var(--accent-secondary);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+/* Animaciones */
+.loader::after {
+  content: '...';
+  animation: dots 1.5s steps(5, end) infinite;
+}
+
+@keyframes dots {
+  0%, 20% { content: '.'; }
+  40% { content: '..'; }
+  60% { content: '...'; }
+  80%, 100% { content: '   '; }
+}
+
+.qa-item.nueva-pregunta {
+  animation: slideIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 16px;
+    max-width: 100%;
+  }
+  
+  .header-section {
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .logo-title-section {
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+  }
+  
+  .logo {
+    height: 120px; /* Reducido proporcionalmente para móvil */
+  }
+  
+  .title-container h1 {
+    font-size: 34px; /* Reducido 10%: de 38px a 34px */
+  }
+  
+  .title-container h2 {
+    font-size: 23px; /* Reducido 10%: de 26px a 23px */
+  }
+  
+  .theme-toggle-section {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .assistant-selector-section {
+    padding: 0 16px;
+    margin-bottom: 20px;
+  }
+  
+  .select-container select {
+    min-width: auto;
+    width: 100%;
+    max-width: 320px;
+  }
+  
+  .form-container {
+    padding: 20px;
+  }
+  
+  textarea {
+    min-height: 100px;
+  }
+  
+  .pregunta-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo-title-section {
+    gap: 16px;
+  }
+  
+  .logo {
+    height: 100px; /* Más pequeño en móviles muy pequeños */
+  }
+  
+  .title-container h1 {
+    font-size: 29px; /* Reducido 10%: de 32px a 29px */
+    letter-spacing: -0.6px;
+  }
+  
+  .title-container h2 {
+    font-size: 20px; /* Reducido 10%: de 22px a 20px */
+  }
+  
+  .select-container select {
+    min-width: auto;
+    width: 100%;
+    padding: 12px 40px 12px 16px;
+  }
+}

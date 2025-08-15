@@ -1,0 +1,10 @@
+# web/requirements.txt
+Flask
+Flask-SQLAlchemy
+gunicorn
+python-dotenv
+openai
+psycopg2-binary
+supabase
+requests
+markdown

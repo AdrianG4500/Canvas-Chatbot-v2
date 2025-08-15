@@ -1,0 +1,51 @@
+# docker-compose.yml
+
+services:
+  web:
+    build: ./web
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    volumes:
+      - ./web:/app
+      - temp_files:/app/temp_files
+    depends_on:
+      - worker
+    networks:
+      - chatbot-net
+
+  worker:
+    build: ./worker
+    env_file:
+      - .env
+    volumes:
+      - ./worker:/app
+      - temp_files:/app/temp_files
+    depends_on:
+      - db
+    networks:
+      - chatbot-net
+    command: ["python", "worker.py"]
+
+  # Solo para desarrollo (opcional)
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: chatbot_dev
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - chatbot-net
+
+volumes:
+  temp_files:
+  pgdata:
+
+networks:
+  chatbot-net:
+    driver: bridge

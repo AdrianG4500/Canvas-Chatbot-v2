@@ -1,0 +1,117 @@
+<!-- templates/admin_config.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Configuración Avanzada</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <style>
+    .form-section { margin: 30px 0; padding: 20px; border: 1px solid #ddd; border-radius: 8px; }
+    input, select, button { padding: 8px; margin: 5px 0; width: 100%; }
+    button { background: #0066cc; color: white; border: none; cursor: pointer; }
+    button:hover { background: #0055aa; }
+    .list { margin: 20px 0; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔧 Configuración Avanzada</h1>
+    <a href="/admin">&larr; Volver al Admin</a>
+
+    <!-- 1. Crear Curso -->
+    <div class="form-section">
+      <h2>➕ Crear Curso</h2>
+      <input type="text" id="course_id" placeholder="Course ID (ej: 91340000000002198)" />
+      <input type="text" id="nombre" placeholder="Nombre del curso" />
+      <input type="text" id="lti_deployment_id" placeholder="LTI Deployment ID" />
+      <input type="text" id="vector_store_id" placeholder="Vector Store ID (opcional)" />
+      <button onclick="crearCurso()">Crear Curso</button>
+    </div>
+
+    <!-- 2. Crear Asistente -->
+    <div class="form-section">
+      <h2>🤖 Crear Asistente</h2>
+      <select id="subtipo">
+        <option value="general">Asistente General</option>
+        <option value="evaluador">Evaluador</option>
+        <option value="reflexivo">Reflexivo</option>
+        <option value="conceptual">Conceptual</option>
+        <option value="analizador_codigo">Analizador de Código</option>
+        <option value="mapas_mentales">Mapas Mentales</option>
+      </select>
+      <input type="text" id="curso_id_asistente" placeholder="Course ID (para nombre automático)" />
+      <input type="text" id="vector_store_id_asistente" placeholder="Vector Store ID" />
+      <button onclick="crearAsistente()">Crear Asistente</button>
+    </div>
+
+    <!-- 3. Editar Cursos y Asistentes -->
+    <div class="form-section">
+      <h2>✏️ Editar Cursos</h2>
+      <div class="list">
+        {% for curso in cursos %}
+          <div style="border-bottom:1px solid #eee;padding:10px;">
+            <strong>{{ curso.nombre }}</strong> ({{ curso.course_id }})
+            <br>
+            <input type="text" value="{{ curso.vector_store_id or '' }}" placeholder="Vector Store ID" id="vs_{{ curso.course_id }}" style="width:70%">
+            <button onclick="actualizarCurso('{{ curso.course_id }}')">Actualizar</button>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h2>✏️ Editar Asistentes</h2>
+      <div class="list">
+        {% for asistente in asistentes %}
+          <div style="border-bottom:1px solid #eee;padding:10px;">
+            <strong>{{ asistente.nombre }}</strong> ({{ asistente.subtipo }})
+            <br>
+            <input type="text" value="{{ asistente.vector_store_id or '' }}" placeholder="Vector Store ID" id="vs_a_{{ asistente.asistente_id }}" style="width:70%">
+            <button onclick="actualizarAsistente('{{ asistente.asistente_id }}')">Actualizar</button>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function crearCurso() {
+      const data = {
+        course_id: document.getElementById("course_id").value,
+        nombre: document.getElementById("nombre").value,
+        lti_deployment_id: document.getElementById("lti_deployment_id").value,
+        vector_store_id: document.getElementById("vector_store_id").value
+      };
+      axios.post("/admin/crear_curso", data)
+        .then(r => { alert("✅ Curso creado"); location.reload(); })
+        .catch(e => { alert("❌ Error: " + e.response.data); });
+    }
+
+    function crearAsistente() {
+      const data = {
+        subtipo: document.getElementById("subtipo").value,
+        curso_id: document.getElementById("curso_id_asistente").value,
+        vector_store_id: document.getElementById("vector_store_id_asistente").value
+      };
+      axios.post("/admin/crear_asistente", data)
+        .then(r => { alert("✅ Asistente creado"); location.reload(); })
+        .catch(e => { alert("❌ Error: " + e.response.data); });
+    }
+
+    function actualizarCurso(course_id) {
+      const vector_store_id = document.getElementById("vs_" + course_id).value;
+      axios.post("/admin/actualizar_curso", { course_id, vector_store_id })
+        .then(r => { alert("✅ Actualizado"); })
+        .catch(e => { alert("❌ Error"); });
+    }
+
+    function actualizarAsistente(asistente_id) {
+      const vector_store_id = document.getElementById("vs_a_" + asistente_id).value;
+      axios.post("/admin/actualizar_asistente", { asistente_id, vector_store_id })
+        .then(r => { alert("✅ Actualizado"); })
+        .catch(e => { alert("❌ Error"); });
+    }
+  </script>
+</body>
+</html>

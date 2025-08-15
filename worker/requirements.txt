@@ -1,0 +1,12 @@
+# worker/requirements.txt
+Flask
+Flask-SQLAlchemy
+python-dotenv
+openai
+psycopg2-binary
+supabase
+requests
+pandas
+openpyxl
+xlrd
+PyPDF2
