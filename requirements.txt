@@ -8,3 +8,5 @@ psycopg2-binary
 supabase
 requests
 markdown
+PyJWT
+cryptography

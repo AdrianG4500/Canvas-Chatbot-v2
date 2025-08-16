@@ -57,7 +57,7 @@ def login():
     client_id = data.get("client_id")
     lti_deployment_id = data.get("lti_deployment_id", "")
     
-    logger.info(f"🔍 lti_message_hint recibido: {lti_message_hint}")
+    #logger.info(f"🔍 lti_message_hint recibido: {lti_message_hint}")
     logger.info(f"📩 Datos recibidos: {dict(data)}")
 
     if not all([login_hint, target_link_uri, client_id]):
