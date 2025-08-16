@@ -28,6 +28,7 @@ lti_bp = Blueprint('lti', __name__, url_prefix="/lti")
 CLAIM_CONTEXT = "https://purl.imsglobal.org/spec/lti/claim/context"
 CLAIM_DEPLOYMENT_ID = "https://purl.imsglobal.org/spec/lti/claim/deployment_id"
 
+
 # === JWKS Endpoint (para Canvas) ===
 @lti_bp.route('/.well-known/jwks.json')
 def jwks():
@@ -52,9 +53,12 @@ def login():
     iss = data.get("iss")
     login_hint = data.get("login_hint")
     target_link_uri = data.get("target_link_uri")
+    lti_message_hint = data.get("lti_message_hint", "")
     client_id = data.get("client_id")
     lti_deployment_id = data.get("lti_deployment_id", "")
-    lti_message_hint = data.get("lti_message_hint", "")
+    
+    logger.info(f"🔍 lti_message_hint recibido: {lti_message_hint}")
+    logger.info(f"📩 Datos recibidos: {dict(data)}")
 
     if not all([login_hint, target_link_uri, client_id]):
         logger.warning("❌ Faltan parámetros en /login")
