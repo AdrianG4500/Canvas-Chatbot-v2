@@ -114,17 +114,30 @@ def launch():
     try:
         # Decodificar header para obtener kid
         unverified_header = jwt.get_unverified_header(id_token)
-        jwks = requests.get(CANVAS_JWKS_URL).json()
-        public_keys = {
-            key["kid"]: jwt.algorithms.RSAAlgorithm.from_jwk(json.dumps(key))
-            for key in jwks["keys"]
-        }
-        key = public_keys[unverified_header["kid"]]
+
+        # Obtener JWKS de Canvas
+        jwks_response = requests.get(CANVAS_JWKS_URL)
+        jwks_response.raise_for_status()
+        jwks = jwks_response.json()
+
+        # Buscar la clave con el kid
+        jwk = None
+        for key in jwks["keys"]:
+            if key["kid"] == unverified_header["kid"]:
+                jwk = key
+                break
+
+        if not jwk:
+            logger.warning(f"❌ Clave no encontrada para kid: {unverified_header['kid']}")
+            return "Clave no encontrada", 400
+
+        # Crear la clave pública
+        public_key = jwt.PyJWK(jwk).key
 
         # Decodificar token
         decoded = jwt.decode(
             id_token,
-            key=key,
+            public_key,
             algorithms=["RS256"],
             audience=CANVAS_CLIENT_ID,
             issuer=CANVAS_ISSUER
