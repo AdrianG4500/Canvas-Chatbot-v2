@@ -25,7 +25,7 @@ if not DATABASE_URL:
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 # === LTI ===
-CANVAS_ISSUER = "https://sso.canvaslms.com"
+CANVAS_ISSUER = "https://canvas.instructure.com"
 CANVAS_JWKS_URL = "https://sso.canvaslms.com/api/lti/security/jwks"
 CANVAS_CLIENT_ID = os.getenv("CANVAS_CLIENT_ID")
 
