@@ -34,7 +34,7 @@ def procesar_consulta_individual(consulta_id):
         if not curso:
             raise Exception("Curso no encontrado")
 
-        asistente_id = curso.asistente_principal_id
+        asistente_id = consulta.asistente_id
         print(f"   🤖 Asistente ID: {asistente_id}")
         if not asistente_id:
             raise Exception("Asistente no configurado para el curso")

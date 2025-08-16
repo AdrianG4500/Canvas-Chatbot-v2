@@ -60,7 +60,7 @@ def login():
     lti_deployment_id = data.get("lti_deployment_id", "")
     
     #logger.info(f"🔍 lti_message_hint recibido: {lti_message_hint}")
-    logger.info(f"📩 Datos recibidos: {dict(data)}")
+    #logger.info(f"📩 Datos recibidos: {dict(data)}")
 
     if not all([login_hint, target_link_uri, client_id]):
         logger.warning("❌ Faltan parámetros en /login")
@@ -91,7 +91,7 @@ def login():
     }
 
     auth_url = CANVAS_LOGIN_URL + "?" + urlencode(params)
-    logger.info(f"➡️ Redirigiendo a: {auth_url}")
+    #logger.info(f"➡️ Redirigiendo a: {auth_url}")
     return redirect(auth_url)
 
 # === LTI Launch (Step 2) ===
@@ -102,7 +102,7 @@ def launch():
     # Validar state
     received_state = request.form.get('state')
     expected_state = session.get('state')
-    logger.info(f"🔍 /launch: state en sesión = {expected_state}, recibido = {received_state}")
+    #logger.info(f"🔍 /launch: state en sesión = {expected_state}, recibido = {received_state}")
     if not received_state or received_state != expected_state:
         logger.warning(f"❌ State inválido: esperado={expected_state}, recibido={received_state}")
         return "Estado inválido", 400
@@ -115,12 +115,12 @@ def launch():
 
     # ✅ Verifica qué contiene el token (sin verificar firma)
     unverified_payload = jwt.decode(id_token, options={"verify_signature": False})
-    logger.info(f"🔍 [DEBUG] Contenido del token (sin verificar): {unverified_payload}")
+    #logger.info(f"🔍 [DEBUG] Contenido del token (sin verificar): {unverified_payload}")
 
     # ✅ Verifica el 'iss' con repr() para ver espacios
-    logger.info(f"🔍 [DEBUG] iss recibido (con repr): {repr(unverified_payload.get('iss'))}")
-    logger.info(f"🔍 [DEBUG] audience recibido: {unverified_payload.get('aud')}")
-    logger.info(f"🔍 [DEBUG] deployment_id: {unverified_payload.get('https://purl.imsglobal.org/spec/lti/claim/deployment_id')}")
+    #logger.info(f"🔍 [DEBUG] iss recibido (con repr): {repr(unverified_payload.get('iss'))}")
+    #logger.info(f"🔍 [DEBUG] audience recibido: {unverified_payload.get('aud')}")
+    #logger.info(f"🔍 [DEBUG] deployment_id: {unverified_payload.get('https://purl.imsglobal.org/spec/lti/claim/deployment_id')}")
 
     try:
         # Decodificar header para obtener kid
@@ -131,8 +131,8 @@ def launch():
         jwks_response.raise_for_status()
         jwks = jwks_response.json()
 
-        logger.info(f"🔍 [JWKS] Claves disponibles: {[key['kid'] for key in jwks['keys']]}")
-        logger.info(f"🔍 [JWKS] kid del token: {unverified_header['kid']}")
+        #logger.info(f"🔍 [JWKS] Claves disponibles: {[key['kid'] for key in jwks['keys']]}")
+        #logger.info(f"🔍 [JWKS] kid del token: {unverified_header['kid']}")
 
         # Buscar la clave con el kid
         jwk = None
@@ -148,8 +148,8 @@ def launch():
         # Crear la clave pública
         public_key = jwt.PyJWK(jwk).key
 
-        unverified = jwt.decode(id_token, options={"verify_signature": False})
-        logger.info(f"🔍 Issuer real en token: '{unverified.get('iss')}'")
+        #unverified = jwt.decode(id_token, options={"verify_signature": False})
+        #logger.info(f"🔍 Issuer real en token: '{unverified.get('iss')}'")
 
         # Decodificar token
         decoded = jwt.decode(
@@ -162,14 +162,14 @@ def launch():
 
         token_iss = decoded.get("iss", "")
         expected_iss = CANVAS_ISSUER
-        logger.info(f"🔍 [VALIDACIÓN ISSUER] Recibido: '{repr(token_iss)}'")
-        logger.info(f"🔍 [VALIDACIÓN ISSUER] Esperado: '{repr(expected_iss)}'")
+        #logger.info(f"🔍 [VALIDACIÓN ISSUER] Recibido: '{repr(token_iss)}'")
+        #logger.info(f"🔍 [VALIDACIÓN ISSUER] Esperado: '{repr(expected_iss)}'")
 
         if token_iss.strip() != expected_iss.strip():
             logger.error(f"❌ ISSUER NO COINCIDE: '{token_iss}' != '{expected_iss}'")
             return "Issuer inválido", 400
 
-        logger.info("✅ Issuer válido (después de strip)")
+        #logger.info("✅ Issuer válido (después de strip)")
 
 
         # Validar nonce
