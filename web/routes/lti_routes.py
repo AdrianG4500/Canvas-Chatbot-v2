@@ -5,6 +5,8 @@ import requests
 import json
 import logging
 import secrets
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.backends import default_backend
 from datetime import datetime
 from urllib.parse import urlencode
 from shared.config import (
@@ -105,16 +107,20 @@ def launch():
         logger.warning(f"❌ State inválido: esperado={expected_state}, recibido={received_state}")
         return "Estado inválido", 400
 
-    logger.info("⭐Args:", dict(request.args))
-    logger.info("🔵Form:", dict(request.form))
-    logger.info("🔻Headers:", dict(request.headers))
-    logger.info("📢 Data cruda:", request.get_data())
-
     # Obtener id_token
     id_token = request.form.get('id_token')
     if not id_token:
         logger.warning("❌ No se recibió id_token")
         return "Falta id_token", 400
+
+    # ✅ Verifica qué contiene el token (sin verificar firma)
+    unverified_payload = jwt.decode(id_token, options={"verify_signature": False})
+    logger.info(f"🔍 [DEBUG] Contenido del token (sin verificar): {unverified_payload}")
+
+    # ✅ Verifica el 'iss' con repr() para ver espacios
+    logger.info(f"🔍 [DEBUG] iss recibido (con repr): {repr(unverified_payload.get('iss'))}")
+    logger.info(f"🔍 [DEBUG] audience recibido: {unverified_payload.get('aud')}")
+    logger.info(f"🔍 [DEBUG] deployment_id: {unverified_payload.get('https://purl.imsglobal.org/spec/lti/claim/deployment_id')}")
 
     try:
         # Decodificar header para obtener kid
@@ -124,6 +130,9 @@ def launch():
         jwks_response = requests.get(CANVAS_JWKS_URL)
         jwks_response.raise_for_status()
         jwks = jwks_response.json()
+
+        logger.info(f"🔍 [JWKS] Claves disponibles: {[key['kid'] for key in jwks['keys']]}")
+        logger.info(f"🔍 [JWKS] kid del token: {unverified_header['kid']}")
 
         # Buscar la clave con el kid
         jwk = None
@@ -148,8 +157,20 @@ def launch():
             public_key,
             algorithms=["RS256"],
             audience=CANVAS_CLIENT_ID,
-            issuer=CANVAS_ISSUER
+            options={"verify_iss": False}
         )
+
+        token_iss = decoded.get("iss", "")
+        expected_iss = CANVAS_ISSUER
+        logger.info(f"🔍 [VALIDACIÓN ISSUER] Recibido: '{repr(token_iss)}'")
+        logger.info(f"🔍 [VALIDACIÓN ISSUER] Esperado: '{repr(expected_iss)}'")
+
+        if token_iss.strip() != expected_iss.strip():
+            logger.error(f"❌ ISSUER NO COINCIDE: '{token_iss}' != '{expected_iss}'")
+            return "Issuer inválido", 400
+
+        logger.info("✅ Issuer válido (después de strip)")
+
 
         # Validar nonce
         expected_nonce = session.get("nonce")
