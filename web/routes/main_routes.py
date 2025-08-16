@@ -206,6 +206,6 @@ def test_local():
     session["user_id"] = "test_user_123"
     session["course_id"] = "91340000000002198"
     session["user_full_name"] = "Usuario de Prueba"
-    session["course_name"] = "Microeconomia Aplicada MFE 2025"
+    session["course_name"] = "Introduccion a Negocios y Ciencia de Datos"
     print("🔑 Sesión iniciada localmente con usuario de prueba.")
     return redirect("/")
