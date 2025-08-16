@@ -83,6 +83,7 @@ def login():
         "nonce": nonce,
         "response_mode": "form_post",
         "prompt": "none",
+        "lti_message_hint": lti_message_hint,
         "lti_deployment_id": lti_deployment_id,
         "id_token_signed_response_alg": "RS256"
     }
