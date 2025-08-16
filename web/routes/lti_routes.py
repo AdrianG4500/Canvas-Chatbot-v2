@@ -105,6 +105,11 @@ def launch():
         logger.warning(f"❌ State inválido: esperado={expected_state}, recibido={received_state}")
         return "Estado inválido", 400
 
+    logger.info("⭐Args:", dict(request.args))
+    logger.info("🔵Form:", dict(request.form))
+    logger.info("🔻Headers:", dict(request.headers))
+    logger.info("📢 Data cruda:", request.get_data())
+
     # Obtener id_token
     id_token = request.form.get('id_token')
     if not id_token:
@@ -133,6 +138,9 @@ def launch():
 
         # Crear la clave pública
         public_key = jwt.PyJWK(jwk).key
+
+        unverified = jwt.decode(id_token, options={"verify_signature": False})
+        logger.info(f"🔍 Issuer real en token: '{unverified.get('iss')}'")
 
         # Decodificar token
         decoded = jwt.decode(
