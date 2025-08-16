@@ -100,6 +100,7 @@ def launch():
     # Validar state
     received_state = request.form.get('state')
     expected_state = session.get('state')
+    logger.info(f"🔍 /launch: state en sesión = {expected_state}, recibido = {received_state}")
     if not received_state or received_state != expected_state:
         logger.warning(f"❌ State inválido: esperado={expected_state}, recibido={received_state}")
         return "Estado inválido", 400

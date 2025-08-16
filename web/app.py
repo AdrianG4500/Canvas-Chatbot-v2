@@ -10,6 +10,9 @@ import os
 def create_app():
     app = Flask(__name__)
     app.secret_key = SECRET_KEY
+    app.config['SESSION_COOKIE_SECURE'] = True  # HTTPS
+    app.config['SESSION_COOKIE_HTTPONLY'] = True
+    app.config['SESSION_COOKIE_SAMESITE'] = 'None'  # Necesario para LTI
     
     # ✅ 1. Configurar DATABASE_URL
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
